@@ -1,0 +1,11 @@
+<div class="option-content">
+    <h2>{{ head }}</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="city">City: </label>
+        <input type="text" id="city" name="city" class="form-control" [(ngModel)]="city" required />
+      </div>
+      <button type="submit" class="btn btn-primary">Check</button>
+    </form>
+  </div>
+  

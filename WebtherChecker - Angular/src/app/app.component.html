@@ -1,0 +1,94 @@
+<div class="layout">
+  <div class="content">
+
+    <div style="text-align:center">
+      <h1>{{ title }}</h1>
+     <!-- <app-graph></app-graph>-->
+    </div>    
+
+    <div class="tabs">
+      <div class="tab" [class.active]="selectedTab === 'Opt1'" (click)="selectOption('Opt1')">Coordenades</div>
+      <div class="tab" [class.active]="selectedTab === 'Opt2'" (click)="selectOption('Opt2')">City name</div>
+      <div class="tab" [class.active]="selectedTab === 'Opt3'" (click)="selectOption('Opt3')">Date ratio</div>
+    </div>
+    
+    <div class="content-dynamic">
+      <div class="dynamic-content">
+          @switch(selectedTab) {
+              @case('Opt1') {
+                <app-opt1 class="opt" (coordinatesSubmitted)="getWeatherDataByCoordinates($event.lat, $event.long)"></app-opt1>
+                <div class="weatherData">
+                  <h2>Weather Information</h2>
+                  <p>City: {{ weatherData?.name }} ({{weatherData?.sys?.country}})</p>
+                  <p>Temperature: {{ weatherData?.main?.temp }} °C</p>
+                  <p>Humidity: {{ weatherData?.main?.humidity }} %</p>
+                </div>
+              } @case('Opt2') {
+                <app-opt2 class="opt" (citySubmitted)="getWeatherDataByCity($event)"></app-opt2>
+                <div class="weatherData">
+                  <h2>Weather Information</h2>
+                  <p>City: {{ weatherData?.name }} ({{weatherData?.sys?.country}})</p>
+                  <p>Temperature: {{ weatherData?.main?.temp }} °C</p>
+                  <p>Humidity: {{ weatherData?.main?.humidity }} %</p>
+                </div>
+              } @case('Opt3') {
+                <app-opt3 class="opt" (datesSelected)="handleDatesSelected($event)"></app-opt3>
+                <div *ngIf="temperatureData.length" class="temperature-data-container">
+                  <h3>Temperature Data</h3>
+                  <div class="temperature-data-content">
+                    <div *ngFor="let day of temperatureData">
+                      <strong>{{ day.fecha }}</strong>
+                      <span>
+                        <span *ngFor="let interval of day.intervalos">
+                          {{ interval.hora }}->{{ interval.temperatura }}&nbsp;
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              }
+          }
+      </div>
+    </div>
+
+    <div class="five-days">
+      <div class="five-head">
+        <h2 class="tit">Weather for the next 5 days</h2>
+        <div class="loc">{{weatherData?.name}}</div>
+      </div>
+      <div class="box-container">
+        <div *ngFor="let location of data5days" class="box">
+          <h4>{{ location.date }}</h4>
+          <h2>{{ location.main.temp }}°C</h2>
+          <p class="humidity">Humidity: {{ location.main.humidity }}%</p>
+        </div>
+    </div>    
+    </div>
+    <div class="news-container">
+      <h2>Latest News about weather</h2>
+      <div class="scrollable-news">
+        <div *ngFor="let article of articles" class="news-article">
+          <img *ngIf="article.urlToImage" [src]="article.urlToImage" alt="{{ article.title }}" class="article-image" />
+          <div class="article-content">
+            <h3>
+              <a [href]="article.url" target="_blank">{{ article.title }}</a>
+            </h3>
+            <p>Author: {{ article.author || 'Unknown' }}</p>
+            <p class="published-date">Published At: {{ article.publishedAt | date: 'short' }}</p>
+          </div>
+          <hr class="divider"/>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <div class="right-sidebar">
+    <div *ngFor="let location of serializedData" class="sidebar-item">
+      <h2 class="city">{{ location.name }}</h2>
+      <h2 class="temperature">{{ location.main.temp }} °C</h2>
+      <p class="humidity">Humidity: {{ location.main.humidity }}%</p>
+    </div>
+  </div>
+</div>
+

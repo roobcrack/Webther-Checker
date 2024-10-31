@@ -1,0 +1,14 @@
+<div class="option-content">
+  <h2>{{ head }}</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="lat">Latitude: </label>
+      <input type="number" id="lat" name="lat" class="form-control" [(ngModel)]="lat" required />
+    </div>
+    <div class="form-group">
+      <label for="long">Longitude: </label>
+      <input type="number" id="long" name="long" class="form-control" [(ngModel)]="long" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Check</button>
+  </form>
+</div>
